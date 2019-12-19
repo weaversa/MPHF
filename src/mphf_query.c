@@ -25,7 +25,6 @@ MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution
 
   MPHFQuerier *mphfq = MPHFQuerierAlloc(mphfb->pHashes.nLength, nNumVariables);
   uint32_t nNumBlocks = ((nNumVariables-1) / 8) + 1;
-  fprintf(stderr, "num blocks = %u (%u)\n", nNumBlocks, nNumVariables);
 
   for(i = 0; i < nNumBlocks; i++) {
     for(j = 0; j < 8; j++) {
