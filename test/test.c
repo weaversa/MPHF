@@ -72,6 +72,8 @@ int main() {
     seen[key] = 1;
   }
 
+  free(pElement);
+  
   uint32_t failures = 0;
   for(i = 0; i < nElements; i++) {
     if(seen[i] == 0) {
@@ -84,7 +86,7 @@ int main() {
 
   free(seen);
 
-  fprintf(stdout, "\nTesting query speed with util func: %u queries per second\n", MPHFQueryRate(mphfq));
+  //  fprintf(stdout, "\nTesting query speed with util func: %u queries per second\n", MPHFQueryRate(mphfq));
  
   MPHFQuerierFree(mphfq);
 

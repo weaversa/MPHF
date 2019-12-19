@@ -71,6 +71,7 @@ uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver
     } while(a != '\n' && !feof(outfile));
     if(feof(outfile)) {
       fprintf(stderr, "EOF hit and 's' not found\n");
+      fclose(outfile);
       unlink(outfilename_tmp);
       return NULL;
     }
@@ -81,18 +82,21 @@ uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver
   int32_t err = fscanf(outfile, "%64s", answer);
   if(err != 1) {
     fprintf(stderr, "Problem with result...\n");
+    fclose(outfile);
     unlink(outfilename_tmp);
     return NULL;
   }
 
   if(!strncmp(answer, "UNSATISFIABLE", 13)) {
     fprintf(stderr, "SAT formula is unsatisfiable\n");
+    fclose(outfile);
     unlink(outfilename_tmp);
     return NULL;
   }
 
   if(strncmp(answer, "SATISFIABLE", 11)) {
     fprintf(stderr, "Problem with result...\n");
+    fclose(outfile);
     unlink(outfilename_tmp);
     return NULL;
   }
@@ -105,6 +109,7 @@ uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver
     } while(a != '\n' && !feof(outfile));
     if(feof(outfile)) {
       fprintf(stderr, "EOF hit and 'v' not found\n");
+      fclose(outfile);
       unlink(outfilename_tmp);
       return NULL;
     }
@@ -139,6 +144,7 @@ uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver
     solution[var] = lit > 0;
   }
 
+  fclose(outfile);
   unlink(outfilename_tmp);
 
 #ifdef MPHF_PRINT_BUILD_PROCESS

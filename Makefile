@@ -11,8 +11,8 @@ OBJECTS = $(SOURCES:src/%.c=obj/%.o)
 
 MPHFSATLIB = mphfsat
 CC = gcc
-#DBG = -g -Wall -fstack-protector-all -pedantic
-OPT = -march=native -O3 -DNDEBUG -ffast-math -fomit-frame-pointer -finline-functions
+DBG = -g -Wall -fstack-protector-all -pedantic
+#OPT = -march=native -O3 -DNDEBUG -ffast-math -fomit-frame-pointer -finline-functions
 INCLUDES = -Iinclude
 LIBS = -l$(MPHFSATLIB) -lm
 LDFLAGS = -Llib

@@ -120,16 +120,20 @@ MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params) {
         cnf_t_push(pCNF, unit_clause);
       }
     }
+
+    free(used);
     
     pSolution = find_solution_external(pCNF, m, params.solver_string);
 
-    for(i = 0; i < pVectors->nLength; i++)
+    for(i = 0; i < n; i++)
       clause_t_free(&pVectors->pList[i], NULL);
     cnf_t_free(pVectors, NULL);
-
+    free(pVectors);
+    
     for(i = 0; i < pCNF->nLength; i++)
       clause_t_free(&pCNF->pList[i], NULL);
     cnf_t_free(pCNF, NULL);
+    free(pCNF);
     
     if(pSolution == NULL) {
       //Increase number of variables

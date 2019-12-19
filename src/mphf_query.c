@@ -38,6 +38,8 @@ MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution
     }
   }
 
+  free(pSolution);
+  
   return mphfq;
 }
 
