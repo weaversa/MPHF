@@ -99,7 +99,7 @@ MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params) {
       MPHFGenerateVectorFromHash(mphfb->pHashes.pList[i], &pVectors->pList[i], m);
     }
     
-    cnf_t *pCNF = cnf_t_alloc(n);
+    cnf_t *pCNF = cnf_t_alloc(n*n);
     
     for (i = 0; i < n; i++)
       for (j = i + 1; j < n; j++)
@@ -126,6 +126,7 @@ MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params) {
     for(i = 0; i < pVectors->nLength; i++)
       clause_t_free(&pVectors->pList[i], NULL);
     cnf_t_free(pVectors, NULL);
+
     for(i = 0; i < pCNF->nLength; i++)
       clause_t_free(&pCNF->pList[i], NULL);
     cnf_t_free(pCNF, NULL);

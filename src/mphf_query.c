@@ -2,7 +2,7 @@
 
 MPHFQuerier *MPHFQuerierAlloc(uint8_t nNumElements, uint8_t nNumVariables) {
   MPHFQuerier *mphfq = (MPHFQuerier *)malloc(1 * sizeof(MPHFQuerier));
-  uint32_t nNumBlocks = ((nNumVariables-1) / 8) + 1;
+  uint32_t nNumBlocks = (nNumVariables / 8) + 1;
   mphfq->pSolution = (uint8_t *)calloc(nNumBlocks, sizeof(uint8_t));
   mphfq->nNumElements = nNumElements;
   mphfq->nNumVariables = nNumVariables;
@@ -24,8 +24,11 @@ MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution
   uint8_t i, j;
 
   MPHFQuerier *mphfq = MPHFQuerierAlloc(mphfb->pHashes.nLength, nNumVariables);
-  uint32_t nNumBlocks = ((nNumVariables-1) / 8) + 1;
-  
+  uint32_t nNumBlocks = (nNumVariables / 8) + 1;
+  fprintf(stderr, "num blocks = %u (%u)\n", nNumBlocks, nNumVariables);
+
+  //We're currently storing one extra bit here. pSolution[0] currently
+  //references variable 0, which there is none.
   for(i = 0; i < nNumBlocks; i++) {
     for(j = 0; j < 8; j++) {
       if(i*8 + j > mphfq->nNumVariables) break;
@@ -70,13 +73,13 @@ uint32_t MPHFQuery(MPHFQuerier *mphfq, const void *pElement, size_t nElementByte
   return nKey;
 }
 
-uint32_t MPHFQueryRate(MPHFQuerier *mphfq, uint32_t nElementBytes) {
+uint32_t MPHFQueryRate(MPHFQuerier *mphfq) {
   uint32_t i;
   uint32_t nElementsQueried = 10000000;
 
   clock_t start = clock();
   for(i = 0; i < nElementsQueried; i++) {
-    uint32_t volatile ret = MPHFQuery(mphfq, &i, nElementBytes);
+    uint32_t volatile ret = MPHFQuery(mphfq, &i, sizeof(uint32_t));
   }
   clock_t end = clock();
   

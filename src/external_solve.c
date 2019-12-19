@@ -111,9 +111,9 @@ uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver
     a = getc(outfile);
   }
 
-  uint8_t *solution = malloc(sizeof(uint8_t) * nNumVariables);
+  uint8_t *solution = malloc(sizeof(uint8_t) * (nNumVariables+1));
   
-  for(i = 1; i <= nNumVariables; i++) {
+  for(i = 0; i <= nNumVariables; i++) {
     solution[i] = 0; //Assign unassigned variables to 0,
   }
 

@@ -34,5 +34,5 @@ MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params);
 MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution, uint8_t nNumVariables);
 uint32_t MPHFQuery(MPHFQuerier *mphfq, const void *pElement, size_t nElementBytes);
 void MPHFQuerierFree(MPHFQuerier *mphfq);
-uint32_t MPHFQueryRate(MPHFQuerier *mphfq, uint32_t nElementBytes);
+uint32_t MPHFQueryRate(MPHFQuerier *mphfq);
 uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver_string[256]);
