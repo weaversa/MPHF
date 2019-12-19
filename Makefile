@@ -9,18 +9,18 @@ src/mphf_query.c src/external_solve.c src/xxhash.c
 
 OBJECTS = $(SOURCES:src/%.c=obj/%.o)
 
-MPHFCNFLIB = mphfcnf
+MPHFSATLIB = mphfsat
 CC = gcc
 #DBG = -g -Wall -fstack-protector-all -pedantic
 OPT = -march=native -O3 -DNDEBUG -ffast-math -fomit-frame-pointer -finline-functions
 INCLUDES = -Iinclude
-LIBS = -l$(MPHFCNFLIB) -lm
+LIBS = -l$(MPHFSATLIB) -lm
 LDFLAGS = -Llib
 CFLAGS = -std=gnu99 $(DBG) $(OPT) $(INCLUDES) -fopenmp
 AR = ar r
 RANLIB = ranlib
 
-all: depend lib/lib$(MPHFCNFLIB).a
+all: depend lib/lib$(MPHFSATLIB).a
 
 depend: .depend
 .depend: $(SOURCES)
@@ -40,18 +40,18 @@ $(OBJECTS): obj/%.o : src/%.c Makefile
 	@[ -d obj ] || mkdir -p obj
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-lib/lib$(MPHFCNFLIB).a: $(OBJECTS) Makefile
+lib/lib$(MPHFSATLIB).a: $(OBJECTS) Makefile
 	@echo "Creating "$@""
 	@[ -d lib ] || mkdir -p lib
 	@rm -f $@
 	@$(AR) $@ $(OBJECTS)
 	@$(RANLIB) $@
 
-test/test: test/test.c lib/lib$(MPHFCNFLIB).a
+test/test: test/test.c lib/lib$(MPHFSATLIB).a
 	$(CC) $(CFLAGS) $(LDFLAGS) test/test.c -o test/test $(LIBS)
 
 clean:
-	rm -rf *~ */*~ $(OBJECTS) ./.depend test/test *.dSYM test/test.dSYM lib/lib$(MPHFCNFLIB).a obj
+	rm -rf *~ */*~ $(OBJECTS) ./.depend test/test *.dSYM test/test.dSYM lib/lib$(MPHFSATLIB).a obj
 
 edit:
 	emacs -nw $(SOURCES) $(HEADERS) $(EXTRAS)

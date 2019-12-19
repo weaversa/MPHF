@@ -17,7 +17,7 @@ int main() {
       .solver_string = "glucose -model"
     };
   
-  uint32_t nElements = 20;
+  uint32_t nElements = 30;
   uint32_t i, j;
 
   MPHFBuilder *mphfb = MPHFBuilderAlloc(nElements);

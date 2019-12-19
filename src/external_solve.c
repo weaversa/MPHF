@@ -30,7 +30,11 @@ uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver
 
   char command[1024];
   snprintf(command, 1024, "%s < %s > %s", solver_string, satfilename_tmp, outfilename_tmp);
-  fprintf(stdout, "command = %s\n", command);
+
+#ifdef MPHF_PRINT_BUILD_PROCESS
+  fprintf(stderr, "command = %s\n", command);
+#endif
+  
   int success = system(command);
   if(success == 32512) {
     fprintf(stderr, "solver not found in path...exiting\n");
@@ -136,10 +140,12 @@ uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver
   }
 
   unlink(outfilename_tmp);
-  
+
+#ifdef MPHF_PRINT_BUILD_PROCESS
   for(i = 1; i <= nNumVariables; i++)
     fprintf(stderr, "%u", solution[i]);
   fprintf(stderr, "\n");
+#endif
   
   return solution;
 }

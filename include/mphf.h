@@ -10,6 +10,8 @@
 #include "list_types.h"
 #include "mphf_hashes.h"
 
+#define MPHF_PRINT_BUILD_PROCESS
+
 typedef struct MPHFParameters {
   double fBitsPerElement; //Roughly 1.44
   char solver_string[256]; //"glucose -model", for example
