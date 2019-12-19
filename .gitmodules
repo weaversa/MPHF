@@ -1,0 +1,3 @@
+[submodule "cnf/lib/c_list_types"]
+	path = cnf/lib/c_list_types
+	url = https://github.com/weaversa/c_list_types
