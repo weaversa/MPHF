@@ -2,7 +2,7 @@
 
 MPHFQuerier *MPHFQuerierAlloc(uint8_t nNumElements, uint8_t nNumVariables) {
   MPHFQuerier *mphfq = (MPHFQuerier *)malloc(1 * sizeof(MPHFQuerier));
-  uint32_t nNumBlocks = (nNumVariables / 8) + 1;
+  uint32_t nNumBlocks = ((nNumVariables-1) / 8) + 1;
   mphfq->pSolution = (uint8_t *)calloc(nNumBlocks, sizeof(uint8_t));
   mphfq->nNumElements = nNumElements;
   mphfq->nNumVariables = nNumVariables;
@@ -24,15 +24,13 @@ MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution
   uint8_t i, j;
 
   MPHFQuerier *mphfq = MPHFQuerierAlloc(mphfb->pHashes.nLength, nNumVariables);
-  uint32_t nNumBlocks = (nNumVariables / 8) + 1;
+  uint32_t nNumBlocks = ((nNumVariables-1) / 8) + 1;
   fprintf(stderr, "num blocks = %u (%u)\n", nNumBlocks, nNumVariables);
 
-  //We're currently storing one extra bit here. pSolution[0] currently
-  //references variable 0, which there is none.
   for(i = 0; i < nNumBlocks; i++) {
     for(j = 0; j < 8; j++) {
       if(i*8 + j > mphfq->nNumVariables) break;
-      if(pSolution[i*8 + j] == 1) {
+      if(pSolution[1 + i*8 + j] == 1) {
         mphfq->pSolution[i] |= 1 << j;
       }
     }
@@ -63,9 +61,9 @@ uint32_t MPHFQuery(MPHFQuerier *mphfq, const void *pElement, size_t nElementByte
     int8_t nLit = pList[i];
     uint8_t bit;
     if(nLit > 0) {
-      bit = (mphfq->pSolution[nLit>>3] >> (nLit&0x7)) & 1;
+      bit = (mphfq->pSolution[(nLit-1)>>3] >> ((nLit-1)&0x7)) & 1;
     } else {
-      bit = (~(mphfq->pSolution[(-nLit)>>3] >> ((-nLit)&0x7))) & 1;
+      bit = (~(mphfq->pSolution[((-nLit)-1)>>3] >> (((-nLit)-1)&0x7))) & 1;
     }
     nKey |= bit << i;
   }
