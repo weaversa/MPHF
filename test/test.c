@@ -10,7 +10,6 @@ int main() {
   gettimeofday(&tv1, &tzp1);
   uint32_t random_seed = ((tv1.tv_sec & 0177) * 1000000) + tv1.tv_usec;
 
-  random_seed = 74471217;
   fprintf(stderr, "random seed = %d\n", random_seed);
   srand(random_seed);
 
@@ -86,7 +85,7 @@ int main() {
 
   free(seen);
 
-  //  fprintf(stdout, "\nTesting query speed with util func: %u queries per second\n", MPHFQueryRate(mphfq));
+  fprintf(stdout, "\nTesting query speed with util func: %u queries per second\n", MPHFQueryRate(mphfq));
  
   MPHFQuerierFree(mphfq);
 
