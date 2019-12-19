@@ -52,7 +52,7 @@ test/test: test/test.c lib/lib$(MPHFSATLIB).a
 	$(CC) $(CFLAGS) $(LDFLAGS) test/test.c -o test/test $(LIBS)
 
 clean:
-	rm -rf *~ */*~ $(OBJECTS) ./.depend test/test *.dSYM test/test.dSYM lib/lib$(MPHFSATLIB).a obj
+	rm -rf *~ */*~ $(OBJECTS) ./.depend test/test *.dSYM test/test.dSYM mphf.out lib/lib$(MPHFSATLIB).a obj
 
 edit:
 	emacs -nw $(SOURCES) $(HEADERS) $(EXTRAS)
