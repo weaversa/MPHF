@@ -1,11 +1,12 @@
 EXTRAS = Makefile LICENSE.md README.md LICENSE.xxHash	\
 test/test.c
 
-HEADERS = lib/c_list_types/include/c_list_types.h	\
-include/mphf_hashes.h include/mphf.h include/xxhash.h
+HEADERS = lib/c_list_types/include/c_list_types.h		 \
+include/mphf_hashes.h include/mphf_serial.h \
+include/mphf.h include/xxhash.h
 
-SOURCES = src/list_types.c src/mphf_hashes.c src/mphf_build.c	\
-src/mphf_query.c src/external_solve.c src/xxhash.c
+SOURCES = src/mphf_hashes.c src/mphf_build.c	     \
+src/mphf_query.c src/mphf_serial.c src/external_solve.c src/xxhash.c
 
 OBJECTS = $(SOURCES:src/%.c=obj/%.o)
 

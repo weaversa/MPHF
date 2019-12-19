@@ -120,6 +120,40 @@ uint32_t key = MPHFQuery(mphfq, pElement, nElementBytes);
 
 Here, `pElement` is a pointer to `nElementBytes` number of bytes. The key unique to this element is returned.
 
+Queriers can be serialized (written to a file) in the following way:
+
+```
+  FILE *fout = fopen("mphf.out", "w");
+  if(MPHFSerialize(fout, mphfq) != 0) {
+    fprintf(stderr, "Serialization failed...exiting\n");
+    return -1;
+  }
+  fclose(fout);
+```
+
+Here, `fout` is of type `FILE *`. `ret` will be `0` on failure and `1`
+on success.
+
+A querier can be deserialized (read from a file) in the following way:
+
+```
+  fout = fopen("mphf.out", "r");
+  mphfq = MPHFDeserialize(fout);
+  if(mphfq == NULL) {
+    fprintf(stderr, "Deserialization failed...exiting\n");
+    return -1;
+  }
+  fclose(fout);
+```
+
+Here, `fout` is of type `FILE *`. `mphfq` will be `NULL` on error.
+
+When querying is done, the querier can be freed like so:
+
+```
+  MPHFQuerierFree(mphfq);
+```
+
 To use, simply link against `lib/libmphfsat.a` and include
 `include/mphf.h`.
 

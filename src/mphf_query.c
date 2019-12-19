@@ -6,13 +6,20 @@ MPHFQuerier *MPHFQuerierAlloc(uint8_t nNumElements, uint8_t nNumVariables) {
   mphfq->pSolution = (uint8_t *)calloc(nNumBlocks, sizeof(uint8_t));
   mphfq->nNumElements = nNumElements;
   mphfq->nNumVariables = nNumVariables;
+  mphfq->bMMAP = 0;
   
   return mphfq;
 }
 
 void MPHFQuerierFree(MPHFQuerier *mphfq) {
   if(mphfq != NULL) {
-    if(mphfq->pSolution != NULL) {
+    if(mphfq->bMMAP) {
+      if(mphfq->pSolution != NULL) {
+        uint8_t nNumBlocks = ((mphfq->nNumVariables-1) / 8) + 1;
+        munmap(mphfq->pSolution, nNumBlocks * sizeof(uint8_t));
+      }
+      mphfq->bMMAP = 0;
+    } else if(mphfq->pSolution != NULL) {
       free(mphfq->pSolution);
       mphfq->pSolution = NULL;
     }

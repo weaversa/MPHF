@@ -44,6 +44,11 @@ int main() {
   }
   
   MPHFQuerier *mphfq = MPHFBuilderFinalize(mphfb, test_parameters);
+
+  if(mphfq == NULL) {
+    fprintf(stderr, "MPHF Building Failed\n");
+    return -1;
+  }
   
   clock_t end_cpu = clock();
   time_t end_wall = time(NULL);
@@ -54,11 +59,22 @@ int main() {
 
   MPHFBuilderFree(mphfb);
   
-  if(mphfq == NULL) {
-    fprintf(stderr, "MPHF Building Failed\n");
-    return 0;
+  FILE *fout = fopen("mphf.out", "w");
+  if(MPHFSerialize(fout, mphfq) != 0) {
+    fprintf(stderr, "Serialization failed...exiting\n");
+    return -1;
   }
-  
+  fclose(fout);
+  MPHFQuerierFree(mphfq);
+
+  fout = fopen("mphf.out", "r");
+  mphfq = MPHFDeserialize(fout);
+  if(mphfq == NULL) {
+    fprintf(stderr, "Deserialization failed...exiting\n");
+    return -1;
+  }
+  fclose(fout);
+
   uint8_t *seen = calloc(nElements, sizeof(uint32_t));
   
   srand(random_seed);

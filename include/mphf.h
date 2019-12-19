@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
+#include <sys/mman.h>
 #include <sys/time.h>
 #include <time.h>
 
@@ -25,7 +26,10 @@ typedef struct MPHFQuerier {
   uint8_t *pSolution;
   uint8_t nNumElements;
   uint8_t nNumVariables;
+  uint8_t bMMAP;
 } MPHFQuerier;
+
+#include "mphf_serial.h"
 
 MPHFBuilder *MPHFBuilderAlloc(uint32_t nExpectedElements);
 void MPHFBuilderFree(MPHFBuilder *mphfb);
