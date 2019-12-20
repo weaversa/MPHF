@@ -33,10 +33,12 @@ typedef struct MPHFQuerier {
 
 MPHFBuilder *MPHFBuilderAlloc(uint32_t nExpectedElements);
 void MPHFBuilderFree(MPHFBuilder *mphfb);
+uint8_t MPHFBuilderAddHash(MPHFBuilder *mphfb, MPHFHash pHash);
 uint8_t MPHFBuilderAddElement(MPHFBuilder *mphfb, const void *pElement, size_t nElementBytes);
 MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params);
 MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution, uint8_t nNumVariables);
-uint32_t MPHFQuery(MPHFQuerier *mphfq, const void *pElement, size_t nElementBytes);
+uint32_t MPHFQueryHash(MPHFQuerier *mphfq, MPHFHash mphfh);
+  uint32_t MPHFQuery(MPHFQuerier *mphfq, const void *pElement, size_t nElementBytes);
 void MPHFQuerierFree(MPHFQuerier *mphfq);
 uint32_t MPHFQueryRate(MPHFQuerier *mphfq);
 uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver_string[256]);

@@ -21,9 +21,14 @@ void MPHFBuilderFree(MPHFBuilder *mphfb) {
   free(mphfb);
 }
 
+//Can be used to build with externally hashed elements
+uint8_t MPHFBuilderAddHash(MPHFBuilder *mphfb, MPHFHash pHash) {
+  return MPHFHash_list_push(&mphfb->pHashes, pHash);
+}
+
 uint8_t MPHFBuilderAddElement(MPHFBuilder *mphfb, const void *pElement, size_t nElementBytes) {
   MPHFHash pHash = MPHFGenerateHashesFromElement(pElement, nElementBytes);
-  return MPHFHash_list_push(&mphfb->pHashes, pHash);
+  return MPHFBuilderAddHash(mphfb, pHash);
 }
 
 void removeDups (clause_t *clause) {

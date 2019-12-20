@@ -43,7 +43,7 @@ Run `make` in the project root directory. The library file
 created in this package's `lib` directory
 
 
-# Use
+# Building an MPFH
 
 An MPHF is built in two separate phases. The first involves adding
 elements to a builder object. The second involves creating a querier
@@ -73,8 +73,20 @@ if(MPHFBuilderAddElement(mphfb, pElement, nElementBytes) != 0) {
 Here, `pElement` is a pointer to at least `nElementBytes` number of
 bytes. This element will be copied into the builder.
 
-After all elements have been stored, the querier is ready to be
-created:
+If the elements have already been hashed, those hashes can be directly added to the builder like so:
+
+```
+uint32_t i;
+for(i = 0; i < nNumHashes; i++) {
+  if(MPHFBuilderAddHash(mphfb, (MPHFHash) {.h1 = pHashes[i]}) != 0) {
+    fprintf(stderr, "Hash insertion failed...exiting\n");
+    return -1;
+  }
+}
+```
+
+After all elements (or hashes) have been stored, the querier is ready
+to be created:
 
 ```
 MPHFQuerier *mphfq = MPHFBuilderFinalize(mphfb, test_parameters);
@@ -112,13 +124,31 @@ free'd, like so:
 MPHFBuilderFree(mphfb);
 ```
 
-The MPHF can be queried like so:
+
+# Querying an MPFH
+
+The MPHF can be queried against an element like so:
 
 ```
 uint32_t key = MPHFQuery(mphfq, pElement, nElementBytes);
 ```
 
 Here, `pElement` is a pointer to `nElementBytes` number of bytes. The key unique to this element is returned.
+
+The MPHF can be queried against an already hashed element like so:
+
+```
+uint32_t key = MPHFQueryHash(mphfq, (MPHFHash) {.h1 = hash});
+```
+
+When querying is finished, the querier can be freed like so:
+
+```
+  MPHFQuerierFree(mphfq);
+```
+
+
+# Serialization
 
 Queriers can be serialized (written to a file) in the following way:
 
@@ -148,16 +178,11 @@ A querier can be deserialized (read from a file) in the following way:
 
 Here, `fout` is of type `FILE *`. `mphfq` will be `NULL` on error.
 
-When querying is done, the querier can be freed like so:
 
-```
-  MPHFQuerierFree(mphfq);
-```
+# Linking
 
 To use, simply link against `lib/libmphfsat.a` and include
 `include/mphf.h`.
-
-This interface is demonstrated in a test provided with this library.
 
 
 # Test

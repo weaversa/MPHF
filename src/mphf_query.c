@@ -47,10 +47,10 @@ MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution
   return mphfq;
 }
 
-uint32_t MPHFQuery(MPHFQuerier *mphfq, const void *pElement, size_t nElementBytes) {
+//Can be used to query externally hashed elements
+uint32_t MPHFQueryHash(MPHFQuerier *mphfq, MPHFHash mphfh) {
   uint32_t i;
 
-  MPHFHash mphfh = MPHFGenerateHashesFromElement(pElement, nElementBytes);
   uint32_t nLitsPerClause = 3;
   while (mphfq->nNumElements > (1<<nLitsPerClause)) nLitsPerClause++;
 
@@ -77,6 +77,11 @@ uint32_t MPHFQuery(MPHFQuerier *mphfq, const void *pElement, size_t nElementByte
   if(nKey >= mphfq->nNumElements) nKey ^= 1 << (nLitsPerClause-1);
   
   return nKey;
+}
+
+uint32_t MPHFQuery(MPHFQuerier *mphfq, const void *pElement, size_t nElementBytes) {
+  MPHFHash mphfh = MPHFGenerateHashesFromElement(pElement, nElementBytes);
+  return MPHFQueryHash(mphfq, mphfh);
 }
 
 uint32_t MPHFQueryRate(MPHFQuerier *mphfq) {
