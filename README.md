@@ -61,7 +61,7 @@ elements the MPHF will encode. It is safe to leave this number as `0`,
 but will decrease calls to malloc if the actual number is given ahead
 of time.
 
-Elements are added to the builder like so:
+Elements are added to the builder, like so:
 
 ```
 if(MPHFBuilderAddElement(mphfb, pElement, nElementBytes) != 0) {
@@ -73,7 +73,7 @@ if(MPHFBuilderAddElement(mphfb, pElement, nElementBytes) != 0) {
 Here, `pElement` is a pointer to at least `nElementBytes` number of
 bytes. This element will be copied into the builder.
 
-If an element has already been hashed, the hash can be directly added to the builder like so:
+If an element has already been hashed, the hash can be directly added to the builder, like so:
 
 ```
 if(MPHFBuilderAddHash(mphfb, (MPHFHash) {.h1 = hash}) != 0) {
@@ -124,7 +124,7 @@ MPHFBuilderFree(mphfb);
 
 # Querying an MPFH
 
-The MPHF can be queried against an element like so:
+The MPHF can be queried against an element, like so:
 
 ```
 uint32_t key = MPHFQuery(mphfq, pElement, nElementBytes);
@@ -132,13 +132,13 @@ uint32_t key = MPHFQuery(mphfq, pElement, nElementBytes);
 
 Here, `pElement` is a pointer to `nElementBytes` number of bytes. The key unique to this element is returned.
 
-The MPHF can be queried against an already hashed element like so:
+The MPHF can be queried against an already hashed element, like so:
 
 ```
 uint32_t key = MPHFQueryHash(mphfq, (MPHFHash) {.h1 = hash});
 ```
 
-When querying is finished, the querier can be freed like so:
+When querying is finished, the querier can be freed, like so:
 
 ```
   MPHFQuerierFree(mphfq);
