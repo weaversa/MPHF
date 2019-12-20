@@ -73,15 +73,12 @@ if(MPHFBuilderAddElement(mphfb, pElement, nElementBytes) != 0) {
 Here, `pElement` is a pointer to at least `nElementBytes` number of
 bytes. This element will be copied into the builder.
 
-If the elements have already been hashed, those hashes can be directly added to the builder like so:
+If an element has already been hashed, the hash can be directly added to the builder like so:
 
 ```
-uint32_t i;
-for(i = 0; i < nNumHashes; i++) {
-  if(MPHFBuilderAddHash(mphfb, (MPHFHash) {.h1 = pHashes[i]}) != 0) {
-    fprintf(stderr, "Hash insertion failed...exiting\n");
-    return -1;
-  }
+if(MPHFBuilderAddHash(mphfb, (MPHFHash) {.h1 = hash}) != 0) {
+  fprintf(stderr, "Hash insertion failed...exiting\n");
+  return -1;
 }
 ```
 
