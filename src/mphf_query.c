@@ -35,7 +35,7 @@ MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution
 
   for(i = 0; i < nNumBlocks; i++) {
     for(j = 0; j < 8; j++) {
-      if(i*8 + j > mphfq->nNumVariables) break;
+      if(1 + i*8 + j > mphfq->nNumVariables) break;
       if(pSolution[1 + i*8 + j] == 1) {
         mphfq->pSolution[i] |= 1 << j;
       }
