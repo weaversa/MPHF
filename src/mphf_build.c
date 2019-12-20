@@ -31,6 +31,21 @@ uint8_t MPHFBuilderAddElement(MPHFBuilder *mphfb, const void *pElement, size_t n
   return MPHFBuilderAddHash(mphfb, pHash);
 }
 
+double MPHFCalculateBound(uint32_t nNumElements) {
+  uint32_t i;
+  long double n = (long double) nNumElements;
+  long double s = 1.0, t = 0.0;
+  
+  for (i = 1; i <= nNumElements; i++) {
+    s *= n / (long double) i;
+    while (s > 100) { t += 5; s /= 32; }
+  }
+  
+  s = log(s) / log (2);
+  
+  return (s+t) / n;
+}
+
 void removeDups (clause_t *clause) {
   uint32_t i, j;
   for (i = 0; i < clause->nLength - 1; i++) {

@@ -97,3 +97,9 @@ uint32_t MPHFQueryRate(MPHFQuerier *mphfq) {
   double time_elapsed_in_seconds = ((double) (end - start)) / (double) CLOCKS_PER_SEC;
   return (uint32_t) (((double) nElementsQueried) / time_elapsed_in_seconds);
 }
+
+uint64_t MPHFSize(MPHFQuerier *mphfq) {
+  uint8_t nNumBlocks = ((mphfq->nNumVariables-1) / 8) + 1;
+  uint32_t nMPHFBits = 8 + 8 + (8 * nNumBlocks);
+  return nMPHFBits;
+}

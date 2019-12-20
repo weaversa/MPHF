@@ -13,14 +13,18 @@ int main() {
   fprintf(stderr, "random seed = %d\n", random_seed);
   srand(random_seed);
 
-  MPHFParameters test_parameters =
-    { .fBitsPerElement = 1.30,
-      .solver_string = "glucose -model"
-    };
-  
   uint32_t nElements = 30;
   uint32_t i, j;
 
+  double fBitsPerElement = MPHFCalculateBound(nElements);
+
+  fprintf(stdout, "Suggested bits-per-element for %u elements is %lf\n", nElements, fBitsPerElement);
+  
+  MPHFParameters test_parameters =
+    { .fBitsPerElement = fBitsPerElement,
+      .solver_string = "glucose -model"
+    };
+  
   MPHFBuilder *mphfb = MPHFBuilderAlloc(nElements);
 
   size_t nElementBytes = 10;
@@ -102,7 +106,13 @@ int main() {
   free(seen);
 
   fprintf(stdout, "\nTesting query speed with util func: %u queries per second\n", MPHFQueryRate(mphfq));
- 
+
+  uint32_t nMPHFBits = MPHFSize(mphfq);
+
+  fprintf(stdout, "MPHF is %u total bits, %4.3lf bits per element\n", mphfq->nNumVariables, ((double) mphfq->nNumVariables) / (double) nElements);
+  
+  fprintf(stdout, "Seralized object uses %u total bits, %4.3lf bits per element\n", nMPHFBits, ((double) nMPHFBits) / (double) nElements);
+  
   MPHFQuerierFree(mphfq);
 
   return 0;
