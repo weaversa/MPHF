@@ -22,7 +22,7 @@ int main() {
   
   MPHFParameters test_parameters =
     { .fBitsPerElement = fBitsPerElement,
-      .solver_string = "glucose -model"
+      .solver_string = "glucose-syrup -nthreads=16 -model"
     };
   
   MPHFBuilder *mphfb = MPHFBuilderAlloc(nElements);
@@ -36,6 +36,9 @@ int main() {
 
   time_t start_wall = time(NULL);
   clock_t start_cpu = clock();
+
+  struct timespec start_process, end_process;
+  clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start_process);
   
   for(i = 0; i < nElements; i++) {
     for(j = 0; j < nElementBytes; j++) {
@@ -53,14 +56,19 @@ int main() {
     fprintf(stderr, "MPHF Building Failed\n");
     return -1;
   }
-  
+
+  clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end_process);
   clock_t end_cpu = clock();
+
   time_t end_wall = time(NULL);
   double time_wall = difftime(end_wall, start_wall);
   double time_cpu = ((double) (end_cpu - start_cpu)) / (double) CLOCKS_PER_SEC;
 
+  uint64_t nanoseconds_process = ((double)(((end_process.tv_sec - start_process.tv_sec) * 1e9) + (end_process.tv_nsec - start_process.tv_nsec)));    
+  
   fprintf(stdout, "\nBuilding took %1.0lf wallclock seconds and %1.0lf CPU seconds\n", time_wall, time_cpu);
-
+  fprintf(stdout, "Building took %lu nanoseconds which is %lu nanoseconds per element\n", nanoseconds_process, nanoseconds_process / nElements);
+  
   MPHFBuilderFree(mphfb);
   
   FILE *fout = fopen("mphf.out", "w");
@@ -104,8 +112,9 @@ int main() {
   fprintf(stderr, "Passed = %4.2f%%\n", 100.0 * ((double) (nElements - failures)) / (double) nElements);
 
   free(seen);
-
-  fprintf(stdout, "\nTesting query speed with util func: %u queries per second\n", MPHFQueryRate(mphfq));
+  
+  uint32_t queries_per_second = MPHFQueryRate(mphfq);
+  fprintf(stdout, "\nTesting query speed with util func: %u queries per second (%u nanoseconds per query)\n", queries_per_second, 1000000000 / queries_per_second);
 
   uint32_t nMPHFBits = MPHFSize(mphfq);
 

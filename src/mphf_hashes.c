@@ -15,6 +15,7 @@ MPHFHash MPHFGenerateHashesFromElement(const void *pElement, size_t nElementByte
 }
 
 //Here we use the Kirsch-Mitzenmacher technique.
+inline
 int8_t MPHFGenerateIthValueFromHash(MPHFHash mphfh, uint32_t nSize, uint32_t i) {
   uint32_t *mphfh_32 = (uint32_t *)&mphfh;
   uint32_t hash = ((mphfh_32[0] + (mphfh_32[1] * i)) >> i) % (2*nSize);
@@ -31,11 +32,14 @@ void MPHFGenerateVectorFromHash(MPHFHash mphfh, clause_t *pVector, uint32_t nSiz
   for(i = 0; i < pVector->nLength; i++) {
     pVector->pList[i] = MPHFGenerateIthValueFromHash(mphfh, nSize, i+tries++);
 
+    /*
     //Remove literal if it or its complement already exists
     for(j = 0; j < i; j++) {
       if (abs(pVector->pList[i]) == abs(pVector->pList[j])) {
         i--; break;
       }
     }
+    */
+    
   }
 }
