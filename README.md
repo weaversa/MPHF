@@ -30,7 +30,7 @@ git submodule update --init --recursive
 
 This project also needs a SAT solver to call out to. Any that support
 the SAT competition interface should do
-(http://www.satcompetition.org/). On such solver is Glucose, available
+(http://www.satcompetition.org/). One such solver is Glucose, available
 here: https://www.labri.fr/perso/lsimon/glucose/. Just make sure to
 have the solver binary in your system path and set the `solver_string`
 parameter appropriately (described below).
