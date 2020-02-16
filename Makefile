@@ -15,7 +15,7 @@ OPT = -march=native -O3 -DNDEBUG -ffast-math -fomit-frame-pointer -finline-funct
 INCLUDES = -Iinclude
 LIBS = -l$(MPHFSATLIB) -lm
 LDFLAGS = -Llib
-CFLAGS = -std=gnu99 $(DBG) $(OPT) $(INCLUDES) -fopenmp
+CFLAGS = -std=gnu99 $(DBG) $(OPT) $(INCLUDES)
 AR = ar r
 RANLIB = ranlib
 
