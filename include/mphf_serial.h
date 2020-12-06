@@ -5,6 +5,7 @@ typedef struct MPHFSerialData {
   //MPHF Data
   uint8_t nNumElements;
   uint8_t nNumVariables;
+  uint8_t nNumUNSATCalls;
 } MPHFSerialData;
 
 uint8_t MPHFSerialize(FILE *pMPHFFile, MPHFQuerier *mphfq);

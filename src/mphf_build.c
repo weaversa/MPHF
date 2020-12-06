@@ -106,32 +106,34 @@ void compareAndAppend (cnf_t *pCNF, clause_t x, clause_t y, uint32_t n) {
 MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params) {
   uint32_t i, j;
 
-  uint32_t n = mphfb->pHashes.nLength;
-  uint32_t m = (uint32_t) (((double) n) * params.fBitsPerElement);
+  uint32_t m = mphfb->pHashes.nLength;
+  uint32_t n = (uint32_t) ceil(((double) m) * params.fBitsPerElement);
   uint32_t k = 3;
-  while (n > (1<<k)) k++;
+  uint32_t nNumUNSATCalls = 0;
+  
+  while (m > (1<<k)) k++;
   
   uint8_t *pSolution = NULL;
   while(pSolution == NULL) {
-    cnf_t *pVectors = cnf_t_alloc(n);
-    for(i = 0; i < n; i++) {
+    cnf_t *pVectors = cnf_t_alloc(m);
+    for(i = 0; i < m; i++) {
       clause_t_init(&pVectors->pList[i], k);
-      MPHFGenerateVectorFromHash(mphfb->pHashes.pList[i], &pVectors->pList[i], m);
+      MPHFGenerateVectorFromHash(mphfb->pHashes.pList[i], &pVectors->pList[i], n, nNumUNSATCalls);
     }
     
-    cnf_t *pCNF = cnf_t_alloc(n*n);
+    cnf_t *pCNF = cnf_t_alloc(m*m);
     
-    for (i = 0; i < n; i++)
-      for (j = i + 1; j < n; j++)
-        compareAndAppend(pCNF, pVectors->pList[i], pVectors->pList[j], n);
+    for (i = 0; i < m; i++)
+      for (j = i + 1; j < m; j++)
+        compareAndAppend(pCNF, pVectors->pList[i], pVectors->pList[j], m);
     
     //Force unused literals to false
-    uint8_t *used = (uint8_t *)calloc (sizeof(uint8_t), m+1);
+    uint8_t *used = (uint8_t *)calloc (sizeof(uint8_t), n+1);
     for (i = 0; i < pCNF->nLength; i++)
       for (j = 0; j < pCNF->pList[i].nLength; j++)
         used[abs(pCNF->pList[i].pList[j])] = 1;
     
-    for (i = 1; i <= m; i++) {
+    for (i = 1; i <= n; i++) {
       if (!used[i]) {
         clause_t unit_clause;
         clause_t_init(&unit_clause, 1);
@@ -143,9 +145,9 @@ MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params) {
 
     free(used);
     
-    pSolution = find_solution_external(pCNF, m, params.solver_string);
+    pSolution = find_solution_external(pCNF, n, params.solver_string);
 
-    for(i = 0; i < n; i++)
+    for(i = 0; i < m; i++)
       clause_t_free(&pVectors->pList[i], NULL);
     cnf_t_free(pVectors, NULL);
     free(pVectors);
@@ -156,10 +158,9 @@ MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params) {
     free(pCNF);
     
     if(pSolution == NULL) {
-      //Increase number of variables
-      m++;
+      nNumUNSATCalls++;
     }
   }
   
-  return MPHFCreateQuerierFromBuilder(mphfb, pSolution, m);
+  return MPHFCreateQuerierFromBuilder(mphfb, pSolution, n, nNumUNSATCalls);
 }

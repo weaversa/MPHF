@@ -12,8 +12,9 @@ uint8_t MPHFSerialize(FILE *pMPHFFile, MPHFQuerier *mphfq) {
   if(write != nNumBlocks) return 1; //Failure
 
   //Write mphf header
-  MPHFSerialData mphfsd = { .nNumElements = mphfq->nNumElements,
-			    .nNumVariables = mphfq->nNumVariables
+  MPHFSerialData mphfsd = { .nNumElements   = mphfq->nNumElements,
+                            .nNumVariables  = mphfq->nNumVariables,
+                            .nNumUNSATCalls = mphfq->nNumUNSATCalls
                           };
     
   write = fwrite(&mphfsd, sizeof(MPHFSerialData), 1, pMPHFFile);
@@ -40,6 +41,7 @@ MPHFQuerier *MPHFDeserialize(FILE *pMPHFFile) {
   if(mphfq == NULL) return NULL;
   mphfq->nNumElements = mphfsd.nNumElements;
   mphfq->nNumVariables = mphfsd.nNumVariables;
+  mphfq->nNumUNSATCalls = mphfsd.nNumUNSATCalls;
 
   uint8_t nNumBlocks = ((mphfq->nNumVariables-1) / 8) + 1;
   mphfq->pSolution = (uint8_t *)mmap(0, nNumBlocks * sizeof(uint8_t), PROT_READ, MAP_PRIVATE, fileno(pMPHFFile), 0);
