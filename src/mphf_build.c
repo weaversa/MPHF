@@ -138,11 +138,18 @@ MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params) {
         clause_t unit_clause;
         clause_t_init(&unit_clause, 1);
         unit_clause.nLength = 1;
-        unit_clause.pList[0] = -i;
+        unit_clause.pList[0] = i;
         cnf_t_push(pCNF, unit_clause);
       }
     }
 
+    //Force the last bit to be True?
+    clause_t unit_clause;
+    clause_t_init(&unit_clause, 1);
+    unit_clause.nLength = 1;
+    unit_clause.pList[0] = m;
+    cnf_t_push(pCNF, unit_clause);
+    
     free(used);
     
     pSolution = find_solution_external(pCNF, n, params.solver_string);
