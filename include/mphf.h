@@ -26,7 +26,6 @@ typedef struct MPHFQuerier {
   uint8_t *pSolution;
   uint8_t nNumElements;
   uint8_t nNumVariables;
-  uint8_t nNumUNSATCalls;
   uint8_t bMMAP;
 } MPHFQuerier;
 
@@ -38,7 +37,7 @@ uint8_t MPHFBuilderAddHash(MPHFBuilder *mphfb, MPHFHash pHash);
 uint8_t MPHFBuilderAddElement(MPHFBuilder *mphfb, const void *pElement, size_t nElementBytes);
 double MPHFCalculateBound(uint32_t nNumElements);
 MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params);
-MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution, uint8_t nNumVariables, uint8_t nNumUNSATCalls);
+MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution, uint8_t nNumVariables);
 uint32_t MPHFQueryHash(MPHFQuerier *mphfq, MPHFHash mphfh);
   uint32_t MPHFQuery(MPHFQuerier *mphfq, const void *pElement, size_t nElementBytes);
 void MPHFQuerierFree(MPHFQuerier *mphfq);

@@ -14,6 +14,6 @@ typedef struct MPHFHash {
 create_c_list_headers(MPHFHash_list, MPHFHash)
 
 MPHFHash MPHFGenerateHashesFromElement(const void *pElement, size_t nElementBytes);
-void MPHFGenerateVectorFromHash(MPHFHash mphfh, clause_t *pVector, uint32_t nSize, uint32_t nonce);
+void MPHFGenerateVectorFromHash(MPHFHash mphfh, clause_t *pVector, uint32_t nSize);
 
 #endif

@@ -1,12 +1,11 @@
 #include "mphf.h"
 
-MPHFQuerier *MPHFQuerierAlloc(uint8_t nNumElements, uint8_t nNumVariables, uint8_t nNumUNSATCalls) {
+MPHFQuerier *MPHFQuerierAlloc(uint8_t nNumElements, uint8_t nNumVariables) {
   MPHFQuerier *mphfq = (MPHFQuerier *)malloc(1 * sizeof(MPHFQuerier));
   uint32_t nNumBlocks = ((nNumVariables-1) / 8) + 1;
   mphfq->pSolution = (uint8_t *)calloc(nNumBlocks, sizeof(uint8_t));
   mphfq->nNumElements = nNumElements;
   mphfq->nNumVariables = nNumVariables;
-  mphfq->nNumUNSATCalls = nNumUNSATCalls;
   mphfq->bMMAP = 0;
   
   return mphfq;
@@ -28,10 +27,10 @@ void MPHFQuerierFree(MPHFQuerier *mphfq) {
   }
 }
 
-MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution, uint8_t nNumVariables, uint8_t nNumUNSATCalls) {
+MPHFQuerier *MPHFCreateQuerierFromBuilder(MPHFBuilder *mphfb, uint8_t *pSolution, uint8_t nNumVariables) {
   uint8_t i, j;
 
-  MPHFQuerier *mphfq = MPHFQuerierAlloc(mphfb->pHashes.nLength, nNumVariables, nNumUNSATCalls);
+  MPHFQuerier *mphfq = MPHFQuerierAlloc(mphfb->pHashes.nLength, nNumVariables);
   uint32_t nNumBlocks = ((nNumVariables-1) / 8) + 1;
 
   for(i = 0; i < nNumBlocks; i++) {
@@ -60,7 +59,7 @@ uint32_t MPHFQueryHash(MPHFQuerier *mphfq, MPHFHash mphfh) {
   vector.pList = pList;
   vector.nLength_max = nLitsPerClause;
   
-  MPHFGenerateVectorFromHash(mphfh, &vector, mphfq->nNumVariables, mphfq->nNumUNSATCalls);
+  MPHFGenerateVectorFromHash(mphfh, &vector, mphfq->nNumVariables);
 
   //Evaluate clause
   uint32_t nKey = 0;
