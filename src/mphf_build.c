@@ -43,7 +43,7 @@ double MPHFCalculateBound(uint32_t nNumElements) {
   
   s = log(s) / log (2);
   
-  return (s+t) / n;
+  return n == 0 ? 0 : (s+t) / n;
 }
 
 void removeDups (clause_t *clause) {

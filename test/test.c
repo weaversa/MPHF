@@ -88,6 +88,8 @@ int main() {
   fclose(fout);
 
   uint8_t *seen = calloc(nElements, sizeof(uint32_t));
+
+  fprintf(stdout, "|%llu|", *((uint64_t *) mphfq->pSolution));
   
   srand(random_seed);
   for(i = 0; i < nElements; i++) {
