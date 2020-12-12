@@ -18,6 +18,10 @@ int main() {
 
   double fBitsPerElement = MPHFCalculateBound(nElements);
 
+  for(i = 0; i < 25; i++) {
+    fprintf(stdout, "%u, ",(uint32_t) ceil(((double) i) * MPHFCalculateBound(i)));
+  }
+  
   fprintf(stdout, "Suggested bits-per-element for %u elements is %lf\n", nElements, fBitsPerElement);
   
   MPHFParameters test_parameters =

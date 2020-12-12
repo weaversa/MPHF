@@ -88,7 +88,9 @@ uint8_t *find_solution_external(cnf_t *pCNF, uint32_t nNumVariables, char solver
   }
 
   if(!strncmp(answer, "UNSATISFIABLE", 13)) {
+#ifdef MPHF_PRINT_BUILD_PROCESS
     fprintf(stderr, "SAT formula is unsatisfiable\n");
+#endif
     fclose(outfile);
     unlink(outfilename_tmp);
     return NULL;

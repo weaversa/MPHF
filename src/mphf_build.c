@@ -38,7 +38,7 @@ double MPHFCalculateBound(uint32_t nNumElements) {
   
   for (i = 1; i <= nNumElements; i++) {
     s *= n / (long double) i;
-    while (s > 100) { t += 5; s /= 32; }
+    while (s > 100.0) { t += 5.0; s /= 32.0; }
   }
   
   s = log(s) / log (2);
@@ -107,7 +107,7 @@ MPHFQuerier *MPHFBuilderFinalize(MPHFBuilder *mphfb, MPHFParameters params) {
   uint32_t i, j;
 
   uint32_t n = mphfb->pHashes.nLength;
-  uint32_t m = (uint32_t) (((double) n) * params.fBitsPerElement);
+  uint32_t m = (uint32_t) ceil(((double) n) * params.fBitsPerElement);
   uint32_t k = 3;
   while (n > (1<<k)) k++;
   
